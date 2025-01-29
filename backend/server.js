@@ -2,25 +2,18 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const connectDB = require("./config/db");
+const blogRoutes = require("./routes/blogRoutes");
 
 dotenv.config();
-const connectDB = require("./config/db");
-
+connectDB();
 
 const app = express();
-
-// Middleware
 app.use(express.json());
 app.use(cors());
 
-console.log("MONGO_URI:", process.env.MONGO_URI); //Debugging
-connectDB(); // Connect to MongoDB
+// API Routes
+app.use("/api/blogs", blogRoutes);
 
-// Default route
-app.get("/", (req, res) => {
-    res.send("MERN Blog API is running...");
-});
-
-// Server setup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
